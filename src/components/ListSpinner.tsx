@@ -18,9 +18,6 @@ const StyledSpinner = styled.li<{
   display: flex;
   justify-content: center;
   padding: 20px;
-  background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#444444')};
-  border: 1px solid lightgray;
-  border-radius: 10px;
 
   svg {
     animation: ${spin} infinite 0.5s;
@@ -29,7 +26,6 @@ const StyledSpinner = styled.li<{
 
 const ListSpinner = () => {
   const theme = useAppSelector(({ theme }) => theme);
-
   return (
     <StyledSpinner theme={theme}>
       <ImSpinner8 size={30} />

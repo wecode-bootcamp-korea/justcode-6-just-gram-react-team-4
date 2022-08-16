@@ -35,7 +35,7 @@ const StyledHeader = styled.header<{
     div.inputContainer {
       position: absolute;
       left: calc(50% - 150px);
-      background: #eeeeee;
+      background: ${({ theme }) => (theme === 'light' ? '#eeeeee' : '#666666')};
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -48,6 +48,10 @@ const StyledHeader = styled.header<{
         width: 100%;
         border: none;
         background: transparent;
+
+        &::placeholder {
+          color: ${({ theme }) => (theme === 'light' ? '#666666' : '#eeeeee')};
+        }
       }
     }
 

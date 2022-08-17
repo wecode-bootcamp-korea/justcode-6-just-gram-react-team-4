@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 
 const useScrollDetector = () => {
-  const [isDown, setIsDown] = useState(true);
+  // const [isDown, setIsDown] = useState(true);
   const [scrollOver, setScrollOver] = useState(false);
-  const oldScroll = useRef(0);
-  const newScroll = useRef(0);
+  // const oldScroll = useRef(0);
+  // const newScroll = useRef(0);
 
   useEffect(() => {
     const scrollHandler = () => {
@@ -14,14 +14,14 @@ const useScrollDetector = () => {
         setScrollOver(false);
       }
 
-      newScroll.current = window.scrollY;
+      // newScroll.current = window.scrollY;
 
-      if (newScroll.current > oldScroll.current) {
-        setIsDown(true);
-      } else if (newScroll.current < oldScroll.current) {
-        setIsDown(false);
-      }
-      oldScroll.current = newScroll.current;
+      // if (newScroll.current > oldScroll.current) {
+      //   setIsDown(true);
+      // } else if (newScroll.current < oldScroll.current) {
+      //   setIsDown(false);
+      // }
+      // oldScroll.current = newScroll.current;
     };
 
     window.addEventListener('scroll', scrollHandler);
@@ -31,7 +31,7 @@ const useScrollDetector = () => {
     };
   }, []);
 
-  return { isDown, scrollOver };
+  return { scrollOver };
 };
 
 export default useScrollDetector;

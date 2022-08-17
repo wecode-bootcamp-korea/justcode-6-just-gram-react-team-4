@@ -38,6 +38,10 @@ const useFetch = (lastLi: HTMLLIElement | null) => {
       });
 
       observer.observe(lastLi);
+
+      return () => {
+        observer.disconnect();
+      };
     }
   }, [lastLi]);
 

@@ -11,7 +11,7 @@ const StyledLogin = styled.div<{
 }>`
   max-width: 400px;
   width: 100%;
-  margin-top: 100px;
+  margin-top: 200px;
   border: 1px solid lightgray;
   border-radius: 10px;
   padding: 20px;

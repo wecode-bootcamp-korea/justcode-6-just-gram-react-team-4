@@ -63,21 +63,32 @@ const StyledLi = styled.li<{
     }
   }
 
-  & > p {
-    line-height: 1.5;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: ${({ isOpen }) => (isOpen ? 'none' : '3')};
-    overflow: hidden;
-    cursor: pointer;
-    padding: 0 20px;
-    margin-bottom: 20px;
-  }
+  div.content {
+    position: relative;
+    margin: 0 20px;
 
+    & > p {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: ${({ isOpen }) => (isOpen ? 'none' : '3')};
+      line-height: 1.5;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    span.more {
+      position: absolute;
+      right: 0;
+      bottom: -18px;
+      margin: 0;
+      cursor: pointer;
+      font-size: 12px;
+    }
+  }
   ul.commentList {
     display: flex;
     flex-direction: column;
-    margin: 0 20px;
+    margin: 10px 20px 0 20px;
 
     li {
       display: flex;
@@ -166,14 +177,19 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
       <h4>
         {feed.title} {feed.feedId}
       </h4>
+
       {feed.images && (
         <div className='imageWrapper'>
-          <button className='prev' onClick={() => changePage(false)}>
-            이전
-          </button>
-          <button className='next' onClick={() => changePage(true)}>
-            다음
-          </button>
+          {imagePage !== 0 && (
+            <button className='prev' onClick={() => changePage(false)}>
+              이전
+            </button>
+          )}
+          {imagePage !== feed.images.length - 1 && (
+            <button className='next' onClick={() => changePage(true)}>
+              다음
+            </button>
+          )}
           <div className='imageContainer'>
             {feed.images.map(image => (
               <img src={image} width='100%' key={image} />
@@ -181,8 +197,13 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
           </div>
         </div>
       )}
-      <p onClick={() => setIsOpen(!isOpen)}>{feed.content}</p>
 
+      <div className='content'>
+        <p>{feed.content}</p>
+        <span className='more' onClick={() => setIsOpen(!isOpen)}>
+          더 보기
+        </span>
+      </div>
       <ul className='commentList'>
         {commentList.map(comment => (
           <li key={comment.commentId}>

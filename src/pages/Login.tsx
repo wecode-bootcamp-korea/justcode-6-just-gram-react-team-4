@@ -2,16 +2,18 @@ import { FormEventHandler, useEffect, useState } from 'react';
 import { MdOutlineDarkMode } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import useLogin from '../hooks/useLogin';
 import useValidation from '../hooks/useValidation';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { toggleTheme } from '../redux/slices/isDark';
+import { login } from '../redux/slices/userInfo';
 
 const StyledLogin = styled.div<{
   theme: string;
 }>`
   max-width: 400px;
   width: 100%;
-  margin-top: 200px;
+  margin-top: 14vh;
   border: 1px solid lightgray;
   border-radius: 10px;
   padding: 20px;
@@ -84,8 +86,11 @@ const Login = () => {
 
   const loginHandler: FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault();
+    dispatch(login());
     navigate('/main');
   };
+
+  useLogin();
 
   return (
     <StyledLogin theme={theme}>

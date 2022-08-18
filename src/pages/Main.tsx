@@ -1,18 +1,20 @@
 import styled from 'styled-components';
 import Header from '../components/Header';
-import ListSpinner from '../components/ListSpinner';
+import ListSpinner from '../components/Skeletons/ListSpinner';
 import Feed from '../components/Feed';
 import useFetch from '../hooks/useFetch';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import EndList from '../components/EndList';
 import TopBtn from '../components/TopBtn';
+import Profile from '../components/Profile';
 
 const StyledMain = styled.main`
   max-width: 1100px;
   width: 100%;
-  margin-top: 100px;
+  margin-top: 30px;
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 20px;
 
   ul.feedList {
@@ -28,10 +30,6 @@ const Main = () => {
   const [lastLi, setLastLi] = useState<HTMLLIElement | null>(null);
   const { loading, feedList, end } = useFetch(lastLi);
 
-  const lastLiRef = useCallback((node: HTMLLIElement) => {
-    if (node) setLastLi(node);
-  }, []);
-
   return (
     <>
       <Header />
@@ -42,13 +40,13 @@ const Main = () => {
             <Feed
               feed={feed} //
               key={feed.feedId}
-              ref={i === feedList.length - 1 ? lastLiRef : null}
+              ref={i === feedList.length - 1 ? setLastLi : null}
             />
           ))}
           {loading && <ListSpinner />}
           {end && <EndList />}
         </ul>
-        <aside>2</aside>
+        <Profile />
       </StyledMain>
     </>
   );

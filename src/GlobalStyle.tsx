@@ -7,7 +7,7 @@ const StyledGlobal = createGlobalStyle<{
 }>`
   ${reset}
 
-  * {
+  *:not(svg):not(path) {
     box-sizing: border-box;
     color: ${({ theme }) => (theme === 'light' ? 'black' : 'white')};
     font-family: 'Noto Sans KR', sans-serif; 

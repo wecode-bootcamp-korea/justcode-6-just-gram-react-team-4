@@ -1,5 +1,5 @@
 import { FormEventHandler, forwardRef, useRef, useState } from 'react';
-import { AiOutlineSmile } from 'react-icons/ai';
+import { AiFillHeart, AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineHeart, AiOutlineMessage, AiOutlineSmile } from 'react-icons/ai';
 import { BsTrash } from 'react-icons/bs';
 import styled from 'styled-components';
 import { feedData } from '../fakeData/getData';
@@ -25,19 +25,20 @@ const StyledLi = styled.li<{
   div.imageWrapper {
     overflow: hidden;
     position: relative;
+    margin-bottom: 10px;
 
     button {
       position: absolute;
       top: calc(50% - 15px);
       z-index: 2;
-      width: 30px;
-      height: 30px;
       font-size: 0;
       border: none;
       border-radius: 50%;
       background-color: white;
+      color: black;
       opacity: 0.5;
       cursor: pointer;
+      padding: 0;
 
       &.prev {
         left: 10px;
@@ -51,7 +52,6 @@ const StyledLi = styled.li<{
     div.imageContainer {
       display: flex;
       width: calc(100% * ${({ imageLength }) => (imageLength ? imageLength : 0)});
-      margin-bottom: 20px;
       transform: translateX(calc(-100% * ${({ imagePage, imageLength }) => imagePage / (imageLength as number)}));
       transition: 0.3s;
 
@@ -63,9 +63,21 @@ const StyledLi = styled.li<{
     }
   }
 
+  ul.feedMenu {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+    padding: 0 20px;
+
+    li:first-of-type {
+      cursor: pointer;
+    }
+  }
+
   div.content {
     position: relative;
-    margin: 0 20px;
+    padding: 0 20px;
+    margin-bottom: 20px;
 
     & > p {
       display: -webkit-box;
@@ -74,21 +86,32 @@ const StyledLi = styled.li<{
       line-height: 1.5;
       overflow: hidden;
       margin-bottom: 20px;
+      font-size: 18px;
     }
 
     span.more {
       position: absolute;
-      right: 0;
-      bottom: -18px;
+      right: 20px;
+      bottom: -16px;
       margin: 0;
       cursor: pointer;
       font-size: 12px;
     }
   }
+
+  div.likes {
+    padding: 0 20px;
+    margin-bottom: 20px;
+
+    p {
+      font-weight: 700;
+    }
+  }
+
   ul.commentList {
     display: flex;
     flex-direction: column;
-    margin: 10px 20px 0 20px;
+    margin: 0 20px;
 
     li {
       display: flex;
@@ -99,6 +122,7 @@ const StyledLi = styled.li<{
       strong {
         font-weight: 700;
       }
+
       svg {
         cursor: pointer;
       }
@@ -133,6 +157,7 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [commentList, setCommentList] = useState(feed.commentList || []);
   const [imagePage, setImagePage] = useState(0);
+  const [likes, setLikes] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -182,12 +207,12 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
         <div className='imageWrapper'>
           {imagePage !== 0 && (
             <button className='prev' onClick={() => changePage(false)}>
-              이전
+              <AiOutlineArrowLeft size={30} color='black' />
             </button>
           )}
           {imagePage !== feed.images.length - 1 && (
             <button className='next' onClick={() => changePage(true)}>
-              다음
+              <AiOutlineArrowRight size={30} />
             </button>
           )}
           <div className='imageContainer'>
@@ -198,17 +223,29 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
         </div>
       )}
 
+      <ul className='feedMenu'>
+        <li onClick={() => setLikes(!likes)}>{likes ? <AiFillHeart size={34} color='red' /> : <AiOutlineHeart size={34} />}</li>
+        <li>
+          <AiOutlineMessage size={34} />
+        </li>
+      </ul>
+
       <div className='content'>
         <p>{feed.content}</p>
         <span className='more' onClick={() => setIsOpen(!isOpen)}>
           더 보기
         </span>
       </div>
+
+      <div className='likes'>
+        <p>좋아요 {likes ? 1 : 0}개</p>
+      </div>
+
       <ul className='commentList'>
         {commentList.map(comment => (
           <li key={comment.commentId}>
             <p>
-              <strong>{comment.userId}</strong> {comment.commentMain}
+              <strong>{comment.commentId}</strong> {comment.commentMain}
             </p>
             <BsTrash onClick={() => removeHandler(comment.commentId)} />
           </li>
@@ -216,7 +253,7 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
       </ul>
 
       <form onSubmit={submitHandler}>
-        <AiOutlineSmile size={30} />
+        <AiOutlineSmile size={24} />
         <input ref={inputRef} type='text' id='comment' placeholder='댓글입력' />
       </form>
     </StyledLi>

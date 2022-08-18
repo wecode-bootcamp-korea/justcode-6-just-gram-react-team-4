@@ -6,6 +6,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { toggleTheme } from '../redux/slices/isDark';
+import { logout } from '../redux/slices/userInfo';
+import useLogin from '../hooks/useLogin';
 
 const StyledHeader = styled.header<{
   menu: boolean;
@@ -118,7 +120,7 @@ const Header = () => {
   const [menu, setMenu] = useState(false);
   const theme = useAppSelector(({ theme }) => theme);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  useLogin();
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
@@ -132,10 +134,6 @@ const Header = () => {
       window.removeEventListener('click', clickHandler);
     };
   }, []);
-
-  const logout = () => {
-    navigate('/');
-  };
 
   return (
     <StyledHeader menu={menu} theme={theme}>
@@ -165,7 +163,7 @@ const Header = () => {
             <li>1</li>
             <li>2</li>
             <li>3</li>
-            <li onClick={logout}>로그아웃</li>
+            <li onClick={() => dispatch(logout())}>로그아웃</li>
           </ul>
         </div>
       </div>

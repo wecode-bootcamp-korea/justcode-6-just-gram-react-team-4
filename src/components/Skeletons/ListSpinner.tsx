@@ -1,5 +1,5 @@
 import styled, { keyframes } from 'styled-components';
-import { useAppSelector } from '../redux/hooks';
+import { useAppSelector } from '../../redux/hooks';
 
 const fade = keyframes`
   0% {

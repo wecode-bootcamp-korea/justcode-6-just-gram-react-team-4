@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import styled from 'styled-components';
+import useProfileFetch from '../hooks/useProfileFetch';
 import FollowSkeleton from './Skeletons/FollowSkeleton';
+import ProfileSkeleton from './Skeletons/ProfileSkeleton';
 
 const StyledAside = styled.aside`
   div.profile {
@@ -78,6 +80,7 @@ interface FollowData {
 }
 
 const Profile = () => {
+  const { email, profileLoading, error } = useProfileFetch();
   const [followList, setFollowList] = useState<FollowData[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -105,8 +108,16 @@ const Profile = () => {
           <BsPerson size={60} />
         </div>
         <div className='userName'>
-          <p>나의 이름</p>
-          <p>나의 아이디</p>
+          {error ? (
+            <p>불러올 수 없습니다.</p>
+          ) : profileLoading ? (
+            <ProfileSkeleton />
+          ) : (
+            <>
+              <p>나의 이름</p>
+              <p>{email}</p>
+            </>
+          )}
         </div>
         <button>전환</button>
       </div>

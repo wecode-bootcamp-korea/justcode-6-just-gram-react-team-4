@@ -36,6 +36,7 @@ const StyledRegister = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+    position: relative;
     margin-top: 40px;
 
     div.inputContainer {
@@ -52,6 +53,13 @@ const StyledRegister = styled.div`
         padding: 10px;
         background-color: ${({ theme }) => theme.colors.loginInput};
       }
+    }
+
+    p {
+      position: absolute;
+      bottom: 64px;
+      font-size: 14px;
+      color: ${({ theme }) => theme.colors.subText};
     }
 
     button {
@@ -86,9 +94,9 @@ const Register = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const disabled = useValidation(email, password);
+  const [loginError, setLoginError] = useState(false);
 
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
 
   const registerHandler: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault();
@@ -107,8 +115,9 @@ const Register = ({ toggleTheme }: { toggleTheme: () => void }) => {
       });
 
       dispatch(login(access_token));
+      setLoginError(false);
     } catch (error) {
-      console.log(error);
+      setLoginError(true);
     }
   };
 
@@ -130,6 +139,7 @@ const Register = ({ toggleTheme }: { toggleTheme: () => void }) => {
             placeholder='비밀번호'
           />
         </div>
+        {loginError && <p>이메일과 비밀번호에 오류가 있거나 서버에 오류가 있습니다.</p>}
         <button disabled={disabled}>Register</button>
       </form>
       <Link to='/' className='login'>

@@ -3,10 +3,8 @@ import { BsBookmark, BsPerson, BsSearch } from 'react-icons/bs';
 import { MdOutlineDarkMode } from 'react-icons/md';
 import { AiOutlineHome } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { useAppDispatch } from '../redux/hooks';
 import { logout } from '../redux/slices/userInfo';
-import { useNavigate } from 'react-router-dom';
-
 const StyledHeader = styled.header<{
   menu: boolean;
 }>`
@@ -115,15 +113,7 @@ const StyledHeader = styled.header<{
 
 const Header = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [menu, setMenu] = useState(false);
-  const access_token = useAppSelector(({ userInfo: { access_token } }) => access_token);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!access_token) {
-      navigate('/');
-    }
-  }, [access_token]);
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {

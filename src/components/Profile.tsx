@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BsPerson } from 'react-icons/bs';
 import styled from 'styled-components';
-import useProfileFetch from '../hooks/useProfileFetch';
+import { useAppSelector } from '../redux/hooks';
 import FollowSkeleton from './Skeletons/FollowSkeleton';
 import ProfileSkeleton from './Skeletons/ProfileSkeleton';
 
@@ -80,12 +80,12 @@ interface FollowData {
 }
 
 const Profile = () => {
-  const { email, profileLoading, error } = useProfileFetch();
   const [followList, setFollowList] = useState<FollowData[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [followLoading, setFollowLoading] = useState(true);
+  const { loading, email } = useAppSelector(({ userInfo }) => userInfo);
 
   useEffect(() => {
-    setLoading(true);
+    setFollowLoading(true);
     setTimeout(() => {
       setFollowList([
         {
@@ -97,7 +97,7 @@ const Profile = () => {
           name: '이름2',
         },
       ]);
-      setLoading(false);
+      setFollowLoading(false);
     }, 1000);
   }, []);
 
@@ -108,9 +108,7 @@ const Profile = () => {
           <BsPerson size={60} />
         </div>
         <div className='userName'>
-          {error ? (
-            <p>불러올 수 없습니다.</p>
-          ) : profileLoading ? (
+          {loading ? (
             <ProfileSkeleton />
           ) : (
             <>
@@ -126,7 +124,7 @@ const Profile = () => {
         <button>모두 보기</button>
       </div>
       <ul className='follow'>
-        {loading && (
+        {followLoading && (
           <>
             <FollowSkeleton />
             <FollowSkeleton />

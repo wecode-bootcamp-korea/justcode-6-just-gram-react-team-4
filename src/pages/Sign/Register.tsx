@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { LoginResponse } from '.';
 import useValidation from '../../hooks/useValidation';
 import { useAppDispatch } from '../../redux/hooks';
-import { login } from '../../redux/slices/userInfo';
+import { login, setLoading } from '../../redux/slices/userInfo';
 
 const StyledRegister = styled.div`
   max-width: 400px;
@@ -101,6 +101,7 @@ const Register = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const registerHandler: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault();
 
+    dispatch(setLoading(true));
     try {
       await axios.post('http://auth.jaejun.me:10010/signup', {
         email,
@@ -117,6 +118,7 @@ const Register = ({ toggleTheme }: { toggleTheme: () => void }) => {
       dispatch(login(access_token));
       setLoginError(false);
     } catch (error) {
+      dispatch(setLoading(false));
       setLoginError(true);
     }
   };

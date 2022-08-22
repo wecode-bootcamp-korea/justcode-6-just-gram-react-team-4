@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { LoginResponse } from '.';
 import useValidation from '../../hooks/useValidation';
 import { useAppDispatch } from '../../redux/hooks';
-import { login } from '../../redux/slices/userInfo';
+import { login, setLoading } from '../../redux/slices/userInfo';
 
 const StyledSignIn = styled.div`
   max-width: 400px;
@@ -101,6 +101,7 @@ const Login = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const loginHandler: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault();
 
+    dispatch(setLoading(true));
     try {
       const {
         data: { access_token },
@@ -113,6 +114,7 @@ const Login = ({ toggleTheme }: { toggleTheme: () => void }) => {
       setLoginError(false);
     } catch (error) {
       setLoginError(true);
+      dispatch(setLoading(false));
     }
   };
 

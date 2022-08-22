@@ -5,9 +5,12 @@ import Main from './pages/Main';
 import { ThemeProvider } from 'styled-components';
 import GlobalStyle from './GlobalStyle';
 import Sign from './pages/Sign';
+import useLogin from './hooks/useLogin';
 
 const App = () => {
   const { toggleTheme, theme } = useTheme();
+  useLogin();
+
   return (
     <>
       <ThemeProvider theme={theme}>

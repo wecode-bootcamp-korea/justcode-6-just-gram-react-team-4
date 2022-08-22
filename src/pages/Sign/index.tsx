@@ -10,15 +10,6 @@ export interface LoginResponse {
 }
 
 const Sign = ({ toggleTheme }: { toggleTheme: () => void }) => {
-  const access_token = useAppSelector(({ userInfo: { access_token } }) => access_token);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (access_token) {
-      navigate('/main');
-    }
-  }, [access_token]);
-
   return (
     <Routes>
       <Route path='/' element={<Login toggleTheme={toggleTheme} />} />

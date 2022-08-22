@@ -5,13 +5,12 @@ import { useAppSelector } from '../redux/hooks';
 
 const StyledBtn = styled.button<{
   scrollOver: boolean;
-  theme: boolean;
 }>`
   position: fixed;
   right: 20px;
   bottom: 20px;
   padding: 10px;
-  background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#444444')};
+  background-color: ${({ theme }) => theme.colors.loginInput};
   border: none;
   border-radius: 50%;
   transform: translateY(${({ scrollOver }) => (scrollOver ? '0px' : '100px')});
@@ -21,10 +20,9 @@ const StyledBtn = styled.button<{
 
 const TopBtn = () => {
   const { scrollOver } = useScrollDetector();
-  const theme = useAppSelector(({ theme }) => theme);
 
   return (
-    <StyledBtn scrollOver={scrollOver} theme={theme} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+    <StyledBtn scrollOver={scrollOver} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
       <BiArrowToTop size={40} />
     </StyledBtn>
   );

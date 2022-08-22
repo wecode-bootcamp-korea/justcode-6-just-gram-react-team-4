@@ -1,16 +1,13 @@
-import { FormEventHandler, useEffect, useState } from 'react';
+import { FormEventHandler, useState } from 'react';
 import { MdOutlineDarkMode } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import useLogin from '../hooks/useLogin';
 import useValidation from '../hooks/useValidation';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { toggleTheme } from '../redux/slices/isDark';
 import { login } from '../redux/slices/userInfo';
 
-const StyledLogin = styled.div<{
-  theme: string;
-}>`
+const StyledLogin = styled.div`
   max-width: 400px;
   width: 100%;
   margin-top: 14vh;
@@ -18,7 +15,7 @@ const StyledLogin = styled.div<{
   border-radius: 10px;
   padding: 20px;
   position: relative;
-  background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#444444')};
+  background-color: ${({ theme }) => theme.colors.feed};
 
   h1 {
     font-family: 'Lobster', cursive;
@@ -51,7 +48,7 @@ const StyledLogin = styled.div<{
         border: 1px solid lightgray;
         border-radius: 4px;
         padding: 10px;
-        background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#444444')};
+        background-color: ${({ theme }) => theme.colors.loginInput};
       }
     }
 
@@ -60,7 +57,7 @@ const StyledLogin = styled.div<{
       border: none;
       border-radius: 4px;
       padding: 10px 0;
-      background-color: ${({ theme }) => (theme === 'light' ? 'blue' : '#888888')};
+      background-color: ${({ theme }) => theme.colors.loginButton};
 
       color: white;
       font-weight: 700;
@@ -68,19 +65,18 @@ const StyledLogin = styled.div<{
       cursor: pointer;
 
       &:disabled {
-        background-color: ${({ theme }) => (theme === 'light' ? 'lightskyblue' : '#555555')};
-        color: ${({ theme }) => (theme === 'light' ? 'white' : '#999999')};
+        background-color: ${({ theme }) => theme.colors.disabledBtn};
+        color: ${({ theme }) => theme.colors.loginText};
       }
     }
   }
 `;
 
-const Login = () => {
+const Login = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [email, setEmail] = useState('');
   const [pw, setPw] = useState('');
   const disabled = useValidation(email, pw);
 
-  const theme = useAppSelector(({ theme }) => theme);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -93,9 +89,9 @@ const Login = () => {
   useLogin();
 
   return (
-    <StyledLogin theme={theme}>
+    <StyledLogin>
       <h1>Justgram</h1>
-      <MdOutlineDarkMode size={30} onClick={() => dispatch(toggleTheme())} />
+      <MdOutlineDarkMode size={30} onClick={() => toggleTheme()} />
       <form onSubmit={loginHandler}>
         <div className='inputContainer'>
           <input

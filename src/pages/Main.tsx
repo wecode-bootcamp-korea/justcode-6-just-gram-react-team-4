@@ -7,6 +7,8 @@ import { useState } from 'react';
 import EndList from '../components/EndList';
 import TopBtn from '../components/TopBtn';
 import Profile from '../components/Profile';
+import FeedModal from '../components/FeedModal';
+import useModal from '../hooks/useModal';
 
 const StyledMain = styled.main`
   max-width: 1100px;
@@ -26,13 +28,15 @@ const StyledMain = styled.main`
   }
 `;
 
-const Main = () => {
+const Main = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [lastLi, setLastLi] = useState<HTMLLIElement | null>(null);
   const { loading, feedList, end } = useFetch(lastLi);
+  const { modal, closeModal, openModal } = useModal();
 
   return (
     <>
-      <Header />
+      {modal && <FeedModal closeModal={closeModal} />}
+      <Header toggleTheme={toggleTheme} />
       <TopBtn />
       <StyledMain>
         <ul className='feedList'>
@@ -41,6 +45,7 @@ const Main = () => {
               feed={feed} //
               key={feed.feedId}
               ref={i === feedList.length - 1 ? setLastLi : null}
+              openModal={openModal}
             />
           ))}
           {loading && <ListSpinner />}

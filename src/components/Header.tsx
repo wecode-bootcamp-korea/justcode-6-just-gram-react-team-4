@@ -11,13 +11,12 @@ import useLogin from '../hooks/useLogin';
 
 const StyledHeader = styled.header<{
   menu: boolean;
-  theme: string;
 }>`
   display: flex;
   justify-content: center;
   width: 100%;
   border-bottom: 1px solid lightgray;
-  background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#333333')};
+  background-color: ${({ theme }) => theme.colors.header};
   z-index: 10;
 
   div.headerContainer {
@@ -37,7 +36,7 @@ const StyledHeader = styled.header<{
     div.inputContainer {
       position: absolute;
       left: calc(50% - 150px);
-      background: ${({ theme }) => (theme === 'light' ? '#eeeeee' : '#666666')};
+      background: ${({ theme }) => theme.colors.input};
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -52,7 +51,7 @@ const StyledHeader = styled.header<{
         background: transparent;
 
         &::placeholder {
-          color: ${({ theme }) => (theme === 'light' ? '#666666' : '#eeeeee')};
+          color: ${({ theme }) => theme.colors.placeholder};
         }
       }
     }
@@ -67,7 +66,7 @@ const StyledHeader = styled.header<{
         border-radius: 50%;
 
         &:last-of-type {
-          border: 1px solid ${({ menu, theme }) => (menu ? (theme === 'light' ? 'black' : 'white') : 'transparent')};
+          border: 1px solid ${({ menu, theme }) => (menu ? theme.colors.text : 'transparent')};
         }
       }
     }
@@ -88,14 +87,14 @@ const StyledHeader = styled.header<{
 
         li {
           width: 200px;
-          background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#444444')};
+          background-color: ${({ theme }) => theme.colors.loginInput};
           padding: 14px;
           cursor: pointer;
           transition: 0.1s;
           position: relative;
 
           &:hover {
-            background-color: ${({ theme }) => (theme === 'light' ? '#eeeeee' : '#777777')};
+            background-color: ${({ theme }) => theme.colors.input};
           }
 
           &:last-of-type {
@@ -108,7 +107,7 @@ const StyledHeader = styled.header<{
         position: absolute;
         right: 5px;
         top: -10px;
-        border-bottom: 20px solid ${({ theme }) => (theme === 'light' ? 'white' : '#444444')};
+        border-bottom: 20px solid ${({ theme }) => theme.colors.loginInput};
         border-left: 20px solid transparent;
         border-right: 20px solid transparent;
       }
@@ -116,9 +115,8 @@ const StyledHeader = styled.header<{
   }
 `;
 
-const Header = () => {
+const Header = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [menu, setMenu] = useState(false);
-  const theme = useAppSelector(({ theme }) => theme);
   const dispatch = useAppDispatch();
   useLogin();
 
@@ -136,7 +134,7 @@ const Header = () => {
   }, []);
 
   return (
-    <StyledHeader menu={menu} theme={theme}>
+    <StyledHeader menu={menu}>
       <div className='headerContainer'>
         <h1>Justgram</h1>
         <div className='inputContainer'>
@@ -144,7 +142,7 @@ const Header = () => {
           <input type='text' placeholder='검색' />
         </div>
         <ul className='gnb'>
-          <li onClick={() => dispatch(toggleTheme())}>
+          <li onClick={() => toggleTheme()}>
             <MdOutlineDarkMode size={30} />
           </li>
           <li>

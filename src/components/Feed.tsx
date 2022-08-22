@@ -1,31 +1,38 @@
 import { FormEventHandler, forwardRef, useRef, useState } from 'react';
 import { AiFillHeart, AiOutlineArrowLeft, AiOutlineArrowRight, AiOutlineHeart, AiOutlineMessage, AiOutlineSmile } from 'react-icons/ai';
-import { BsTrash } from 'react-icons/bs';
+import { BsThreeDots, BsTrash } from 'react-icons/bs';
 import styled from 'styled-components';
 import { feedData } from '../fakeData/getData';
+import useSwiper from '../hooks/useSwiper';
 import { useAppSelector } from '../redux/hooks';
 
 const StyledLi = styled.li<{
-  theme: string;
   isOpen: boolean;
   imageLength: number | undefined;
-  imagePage: number;
 }>`
-  background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#333333')};
-  border: 1px solid ${({ theme }) => (theme === 'light' ? 'lightgray' : '#777777')};
+  background-color: ${({ theme }) => theme.colors.feed};
+  border: 1px solid ${({ theme }) => theme.colors.line};
   border-radius: 10px;
   margin-bottom: 20px;
 
-  h4 {
+  div.title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     font-size: 18px;
     font-weight: bold;
     padding: 20px;
+
+    svg {
+      cursor: pointer;
+    }
   }
 
   div.imageWrapper {
     overflow: hidden;
     position: relative;
     margin-bottom: 10px;
+    cursor: pointer;
 
     button {
       position: absolute;
@@ -52,13 +59,12 @@ const StyledLi = styled.li<{
     div.imageContainer {
       display: flex;
       width: calc(100% * ${({ imageLength }) => (imageLength ? imageLength : 0)});
-      transform: translateX(calc(-100% * ${({ imagePage, imageLength }) => imagePage / (imageLength as number)}));
-      transition: 0.3s;
 
       img {
         width: calc(100% / ${({ imageLength }) => (imageLength ? imageLength : 0)});
         aspect-ratio: 1 / 1.1;
         object-fit: cover;
+        -webkit-user-drag: none;
       }
     }
   }
@@ -133,7 +139,7 @@ const StyledLi = styled.li<{
     display: flex;
     align-items: center;
     gap: 10px;
-    border-top: 1px solid ${({ theme }) => (theme === 'light' ? 'gray' : 'white')};
+    border-top: 1px solid ${({ theme }) => theme.colors.line};
     padding: 20px;
     margin-top: 20px;
 
@@ -149,14 +155,14 @@ const StyledLi = styled.li<{
 
 type IFeed = {
   feed: feedData;
+  openModal: (idx: number) => void;
 };
 
-const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
-  const theme = useAppSelector(({ theme }) => theme);
+const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed, openModal }, ref) => {
+  const { swipedTarget, prevBtn, nextBtn, page } = useSwiper(feed.images);
 
   const [isOpen, setIsOpen] = useState(false);
   const [commentList, setCommentList] = useState(feed.commentList || []);
-  const [imagePage, setImagePage] = useState(0);
   const [likes, setLikes] = useState(false);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -181,41 +187,32 @@ const Feed = forwardRef<HTMLLIElement, IFeed>(({ feed }, ref) => {
     setCommentList(commentList.filter(comment => comment.commentId !== commentId));
   };
 
-  const changePage = (isNext: boolean) => {
-    if (feed.images) {
-      if (isNext && imagePage < feed.images.length - 1) {
-        setImagePage(imagePage + 1);
-      } else if (!isNext && imagePage > 0) {
-        setImagePage(imagePage - 1);
-      }
-    }
-  };
-
   return (
     <StyledLi //
-      theme={theme}
       isOpen={isOpen}
       ref={ref}
       imageLength={feed.images?.length}
-      imagePage={imagePage}
     >
-      <h4>
-        {feed.title} {feed.feedId}
-      </h4>
+      <div className='title'>
+        <h4>
+          {feed.title} {feed.feedId}
+        </h4>
+        <BsThreeDots size={20} onClick={() => openModal(feed.feedId)} />
+      </div>
 
       {feed.images && (
         <div className='imageWrapper'>
-          {imagePage !== 0 && (
-            <button className='prev' onClick={() => changePage(false)}>
+          {page === 0 || (
+            <button className='prev' ref={prevBtn}>
               <AiOutlineArrowLeft size={30} color='black' />
             </button>
           )}
-          {imagePage !== feed.images.length - 1 && (
-            <button className='next' onClick={() => changePage(true)}>
+          {page === feed.images.length - 1 || (
+            <button className='next' ref={nextBtn}>
               <AiOutlineArrowRight size={30} />
             </button>
           )}
-          <div className='imageContainer'>
+          <div className='imageContainer' ref={swipedTarget}>
             {feed.images.map(image => (
               <img src={image} width='100%' key={image} />
             ))}

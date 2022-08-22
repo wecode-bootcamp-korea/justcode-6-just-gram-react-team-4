@@ -11,11 +11,9 @@ const fade = keyframes`
   }
 `;
 
-const StyledSpinner = styled.li<{
-  theme: string;
-}>`
-  background-color: ${({ theme }) => (theme === 'light' ? 'white' : '#333333')};
-  border: 1px solid ${({ theme }) => (theme === 'light' ? 'lightgray' : '#777777')};
+const StyledSpinner = styled.li`
+  background-color: ${({ theme }) => theme.colors.header};
+  border: 1px solid ${({ theme }) => theme.colors.line};
   border-radius: 10px;
   margin-bottom: 20px;
   overflow: hidden;
@@ -24,14 +22,14 @@ const StyledSpinner = styled.li<{
   div.title {
     width: 100px;
     height: 24px;
-    background-color: ${({ theme }) => (theme === 'light' ? 'lightgray' : '#777777')};
+    background-color: ${({ theme }) => theme.colors.line};
     border-radius: 10px;
     margin: 20px;
   }
 
   div.image {
     aspect-ratio: 1 / 1.1;
-    background-color: ${({ theme }) => (theme === 'light' ? 'lightgray' : '#777777')};
+    background-color: ${({ theme }) => theme.colors.line};
   }
 
   div.text {
@@ -43,7 +41,7 @@ const StyledSpinner = styled.li<{
     div.line {
       width: 100%;
       height: 24px;
-      background-color: ${({ theme }) => (theme === 'light' ? 'lightgray' : '#777777')};
+      background-color: ${({ theme }) => theme.colors.line};
       border-radius: 10px;
 
       &:last-of-type {
@@ -59,15 +57,14 @@ const StyledSpinner = styled.li<{
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, ${({ theme }) => (theme === 'light' ? '#ffffff00' : '#33333300')} 0%, ${({ theme }) => (theme === 'light' ? '#ffffff' : '#333333')} 50%, ${({ theme }) => (theme === 'light' ? '#ffffff00' : '#33333300')} 100%);
+    background: linear-gradient(90deg, ${({ theme }) => theme.colors.skeletonGrad.side} 0%, ${({ theme }) => theme.colors.skeletonGrad.center} 50%, ${({ theme }) => theme.colors.skeletonGrad.side} 100%);
     animation: ${fade} infinite 0.5s;
   }
 `;
 
 const ListSpinner = () => {
-  const theme = useAppSelector(({ theme }) => theme);
   return (
-    <StyledSpinner theme={theme}>
+    <StyledSpinner>
       <div className='title' />
       <div className='image' />
       <div className='text'>

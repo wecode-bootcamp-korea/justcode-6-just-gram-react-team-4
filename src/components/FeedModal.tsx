@@ -36,13 +36,14 @@ const StyledModal = styled.div`
 
 type IFeedModal = {
   closeModal: React.MouseEventHandler<HTMLDivElement>;
+  selectedFeed: number | null;
 };
 
-const FeedModal = ({ closeModal }: IFeedModal) => {
+const FeedModal = ({ closeModal, selectedFeed }: IFeedModal) => {
   return (
     <StyledModal onClick={closeModal}>
       <ul className='modal'>
-        <li>신고</li>
+        <li>{selectedFeed}번째 피드 신고</li>
         <li>팔로우 하기</li>
         <li>퍼가기</li>
         <li>취소</li>

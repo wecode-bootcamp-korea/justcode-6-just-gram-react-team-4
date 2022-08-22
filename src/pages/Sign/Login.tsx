@@ -1,13 +1,15 @@
+import axios from 'axios';
 import { FormEventHandler, useState } from 'react';
 import { MdOutlineDarkMode } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import useLogin from '../hooks/useLogin';
-import useValidation from '../hooks/useValidation';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { login } from '../redux/slices/userInfo';
+import { LoginResponse } from '.';
+import useValidation from '../../hooks/useValidation';
+import { useAppDispatch } from '../../redux/hooks';
+import { login } from '../../redux/slices/userInfo';
 
-const StyledLogin = styled.div`
+const StyledSignIn = styled.div`
   max-width: 400px;
   width: 100%;
   margin-top: 14vh;
@@ -70,26 +72,43 @@ const StyledLogin = styled.div`
       }
     }
   }
+
+  a.register {
+    display: block;
+    margin-top: 14px;
+    text-decoration: none;
+    text-align: center;
+    color: ${({ theme }) => theme.colors.subText};
+  }
 `;
 
 const Login = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [email, setEmail] = useState('');
-  const [pw, setPw] = useState('');
-  const disabled = useValidation(email, pw);
+  const [password, setPassword] = useState('');
+  const disabled = useValidation(email, password);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const loginHandler: FormEventHandler<HTMLFormElement> = e => {
+  const loginHandler: FormEventHandler<HTMLFormElement> = async e => {
     e.preventDefault();
-    dispatch(login());
-    navigate('/main');
+
+    try {
+      const {
+        data: { access_token },
+      } = await axios.post<LoginResponse>('http://auth.jaejun.me:10010/login', {
+        email,
+        password,
+      });
+
+      dispatch(login(access_token));
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  useLogin();
-
   return (
-    <StyledLogin>
+    <StyledSignIn>
       <h1>Justgram</h1>
       <MdOutlineDarkMode size={30} onClick={() => toggleTheme()} />
       <form onSubmit={loginHandler}>
@@ -102,13 +121,16 @@ const Login = ({ toggleTheme }: { toggleTheme: () => void }) => {
           <input
             type='password' //
             autoComplete='false'
-            onChange={e => setPw(e.target.value)}
+            onChange={e => setPassword(e.target.value)}
             placeholder='비밀번호'
           />
         </div>
         <button disabled={disabled}>Login</button>
       </form>
-    </StyledLogin>
+      <Link to='/register' className='register'>
+        회원가입
+      </Link>
+    </StyledSignIn>
   );
 };
 

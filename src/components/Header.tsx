@@ -1,13 +1,11 @@
 import styled from 'styled-components';
 import { BsBookmark, BsPerson, BsSearch } from 'react-icons/bs';
-import { MdOutlineDarkMode, MdDarkMode } from 'react-icons/md';
+import { MdOutlineDarkMode } from 'react-icons/md';
 import { AiOutlineHome } from 'react-icons/ai';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { toggleTheme } from '../redux/slices/isDark';
 import { logout } from '../redux/slices/userInfo';
-import useLogin from '../hooks/useLogin';
+import { useNavigate } from 'react-router-dom';
 
 const StyledHeader = styled.header<{
   menu: boolean;
@@ -117,8 +115,15 @@ const StyledHeader = styled.header<{
 
 const Header = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [menu, setMenu] = useState(false);
+  const access_token = useAppSelector(({ userInfo: { access_token } }) => access_token);
   const dispatch = useAppDispatch();
-  useLogin();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!access_token) {
+      navigate('/');
+    }
+  }, [access_token]);
 
   useEffect(() => {
     const clickHandler = (e: MouseEvent) => {
@@ -132,6 +137,10 @@ const Header = ({ toggleTheme }: { toggleTheme: () => void }) => {
       window.removeEventListener('click', clickHandler);
     };
   }, []);
+
+  const logoutHandler = () => {
+    dispatch(logout());
+  };
 
   return (
     <StyledHeader menu={menu}>
@@ -158,10 +167,10 @@ const Header = ({ toggleTheme }: { toggleTheme: () => void }) => {
         <div className='lnbContainer'>
           <div className='tail' />
           <ul className='lnb'>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-            <li onClick={() => dispatch(logout())}>로그아웃</li>
+            <li>Profile</li>
+            <li>Likes</li>
+            <li>List</li>
+            <li onClick={logoutHandler}>로그아웃</li>
           </ul>
         </div>
       </div>

@@ -7,6 +7,7 @@ declare module 'styled-components' {
       loginButton: string;
       line: string;
       text: string;
+      subText: string;
       header: string;
       input: string;
       placeholder: string;

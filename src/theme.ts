@@ -4,6 +4,7 @@ export const light: DefaultTheme = {
   colors: {
     body: '#eeeeee',
     text: 'black',
+    subText: '#444444',
     header: 'white',
     line: 'lightgray',
     feed: 'white',
@@ -25,6 +26,7 @@ const dark: DefaultTheme = {
   colors: {
     body: '#222222',
     text: 'white',
+    subText: '#dddddd',
     header: '#333333',
     line: '#777777',
     feed: '#333333',

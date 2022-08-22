@@ -31,11 +31,11 @@ const StyledMain = styled.main`
 const Main = ({ toggleTheme }: { toggleTheme: () => void }) => {
   const [lastLi, setLastLi] = useState<HTMLLIElement | null>(null);
   const { loading, feedList, end } = useFetch(lastLi);
-  const { modal, closeModal, openModal } = useModal();
+  const { modal, closeModal, openModal, selectedFeed } = useModal();
 
   return (
     <>
-      {modal && <FeedModal closeModal={closeModal} />}
+      {modal && <FeedModal closeModal={closeModal} selectedFeed={selectedFeed} />}
       <Header toggleTheme={toggleTheme} />
       <TopBtn />
       <StyledMain>

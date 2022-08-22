@@ -1,23 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export const userInfo = createSlice({
   name: 'userInfo',
   initialState: {
-    isLogin: JSON.parse(localStorage.getItem('isLogin') || 'false') as boolean,
+    access_token: localStorage.getItem('access_token') || '',
   },
   reducers: {
-    login(state) {
-      localStorage.setItem('isLogin', JSON.stringify(true));
+    login(state, { payload }: PayloadAction<string>) {
+      localStorage.setItem('access_token', payload);
       return {
         ...state,
-        isLogin: true,
+        access_token: payload,
       };
     },
     logout(state) {
-      localStorage.setItem('isLogin', JSON.stringify(false));
+      localStorage.setItem('access_token', '');
       return {
         ...state,
-        isLogin: false,
+        access_token: '',
       };
     },
   },

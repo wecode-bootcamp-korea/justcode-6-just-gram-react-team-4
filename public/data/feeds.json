@@ -1,0 +1,26 @@
+{
+  "feedData": [
+    {
+      "feedId": 1,
+      "username": "seeyong_0",
+      "feedImages": [
+        {
+          "imgId": 105,
+          "imgUrl": "/images/mycats.png"
+        }
+      ],
+      "content": "귀여운 냥이들🐱💗"
+    },
+    {
+      "feedId": 2,
+      "username": "seeyong_0",
+      "feedImages": [
+        {
+          "imgId": 106,
+          "imgUrl": "/images/bibi.jpeg"
+        }
+      ],
+      "content": "혀 넣는거 까먹은 비비👅"
+    }
+  ]
+}

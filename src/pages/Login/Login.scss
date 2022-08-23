@@ -1,0 +1,78 @@
+body {
+  background-color: rgb(242, 239, 239);
+}
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  @include flex-center;
+  height: 100%;
+  .login-container {
+    width: 500px;
+    margin-top: 100px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    background-color: white;
+    .logo-wrapper {
+      @include flex-center;
+      padding: 30px;
+      .logo-text {
+        font-family: "Lobster", cursive;
+        font-size: 48px;
+      }
+    }
+  }
+}
+
+.login-wrapper {
+  background-color: rgb(244, 241, 241);
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  padding: 10px 10px;
+  .login-input {
+    background-color: rgb(244, 241, 241);
+    border: none;
+    width: 100%;
+    &:focus {
+      outline: none;
+    }
+  }
+}
+
+.button-wrapper {
+  @include flex-center;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-bottom: 10px;
+  .login-button {
+    width: 100%;
+    color: rgb(255, 255, 255);
+    background-color: #217ffa;
+    border-radius: 5px;
+    border: none;
+    padding: 8px;
+    opacity: 1;
+  }
+}
+
+.login-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.extra-wrapper {
+  @include flex-center;
+  padding-top: 250px;
+  padding-bottom: 20px;
+  .find-password {
+    color: rgb(0, 63, 108);
+  }
+}
